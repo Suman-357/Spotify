@@ -2,13 +2,13 @@ import uniqid from "uniqid";
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useUser } from '@/hooks/useUser';
+import { useRouter } from "next/navigation";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import toast from 'react-hot-toast';
 import useUploadModal from '@/hooks/useUploadModal';
 import Modal from './Modal'
 import Input from './Input';
 import Button from './Button';
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useRouter } from "next/navigation";
 
 const UploadModal = () => {
 
@@ -83,7 +83,7 @@ const onSubmit: SubmitHandler<FieldValues> = async (values) => {
             } = await supabaseClient
             .from('songs')
             .insert({
-                user_id: user.id,
+                id: user.id,
                 title: values.title,
                 author: values.author,
                 image_path: imagedata.path,
@@ -110,11 +110,11 @@ const onSubmit: SubmitHandler<FieldValues> = async (values) => {
   return (
     <Modal title='Add a Song' description='upload an mp3 file' isOpen={uploadmodal.isOpen} onChange={onChange}>
          <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-y-4'>
-            <Input id='title' disabled={isLoading} {...register('title', { required: true })} placeholder='song title'  />
-            <Input id='author' disabled={isLoading} {...register('author', { required: true })} placeholder='song author'  />
+            <Input id='title' disabled={isLoading} {...register('title', { required: true })} placeholder='Song title'  />
+            <Input id='author' disabled={isLoading} {...register('author', { required: true })} placeholder='Song author'  />
             <div className="">
                 <div className="pb-1">
-                    Select a song file
+                    Select a Song file
                 </div>
                 <Input id='song' type='file' accept='.mp3' disabled={isLoading} {...register('song', { required: true })} />
             </div>
